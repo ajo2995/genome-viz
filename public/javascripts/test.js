@@ -42,7 +42,7 @@ function initViz() {
     }
 }
 
-function addTrack(setID) {
+function addTrack(setID,column,where) {
     // calculate the radius for this track
     var r = radius;
     for(var t in tracks) {
@@ -50,7 +50,8 @@ function addTrack(setID) {
         r -= trackWidth;
     }
     r -= trackWidth;
-    tracks[setID] = new Object();
+    var key = setID+column+where;
+    tracks[key] = new Object();
     ctx.lineWidth = trackWidth;
     // ctx.beginPath();
     // ctx.arc(x,y,r,0,2*Math.PI,false);
@@ -61,10 +62,11 @@ function addTrack(setID) {
     var remaining = nChrs;
     for(var chr in chrLengths) {
         (function(c){
-            $.getJSON("/data/"
-            +setID+"/dist?column=pos&part="
+            var url = '/data/'+setID+'/dist?column='+column+'&part='
             +c+"&begin=0&end="
-            +chrLengths[c]+"&stride="+stride, function(res) {
+            +chrLengths[c]+"&stride="+stride;
+            if (where) url += '&where='+where;
+            $.getJSON(url, function(res) {
                 chrCounts[c] = [];
                 for(var i=0;i<res.bounds.length;i++) {
                     chrCounts[c][i] = res.counts[i];
@@ -103,11 +105,15 @@ function changeGenome(genomeID) {
             .text(value.description));
         });
         $(dataset).append(s);
+        $(dataset).append($('<input id="column"/>'));
+        $(dataset).append($('<input id="where"/>'));
         $(dataset).append($('<button/>').text('Add')
         .click(function() {
             var dataSel = document.getElementById('dataSel');
             var setID = $(dataSel).val();
-            if (! tracks.hasOwnProperty(setID)) addTrack(setID);
+            var column = document.getElementById('column').value;
+            var where = document.getElementById('where').value;
+            if (! tracks.hasOwnProperty(setID + column + where)) addTrack(setID,column,where);
             if (setID == 0) {
                 myimage = new Image();
                 myimage.onload = function() {
