@@ -4,11 +4,11 @@
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js'></script>
+    <script type='text/javascript' src='javascripts/donuts.js'></script>
   </head>
-  <body>
-    <ul>
-      <li><a href="/donuts">donuts</a></li>
-      <li><a href="/playground">playground</a></li>
-    </ul>
+  <body onload=init()>
+    <span id='genome'></span>
+    <span id='dataset'></span>
+    <div id='viz'><canvas id='drawhere' width="768" height="768"></canvas></div>
   </body>
 </html>
