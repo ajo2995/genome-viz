@@ -68,9 +68,9 @@ function addTrack(setID,column,where) {
             if (where) url += '&where='+where;
             $.getJSON(url, function(res) {
                 chrCounts[c] = [];
-                for(var i=0;i<res.bounds.length;i++) {
-                    chrCounts[c][i] = res.counts[i];
-                    if (res.counts[i] > max) max = res.counts[i];
+                for(var i=0;i<res[column].length;i++) {
+                    chrCounts[c][i] = res.count[i];
+                    if (res.count[i] > max) max = res.count[i];
                 }
                 remaining--;
                 if (remaining === 0) {
